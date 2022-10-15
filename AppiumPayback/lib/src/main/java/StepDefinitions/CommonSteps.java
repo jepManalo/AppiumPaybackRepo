@@ -9,6 +9,7 @@ import io.cucumber.java.en.*;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.MobileCapabilityType;
 
+import org.testng.Assert;
 import 	org.testng.annotations.*;
 
 public class CommonSteps {
@@ -36,7 +37,10 @@ public class CommonSteps {
 	@Then("I validate the outcomes")
 	public void IValidateTheOutcomes() {
 
-//		Assert.assertEquals();
+		String abc = "abc";
+		String def = "def";
+		
+		Assert.assertEquals(abc, def);
 
 	}
 
