@@ -32,6 +32,7 @@ public class BaseClass {
 			capability.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 60);
 			capability.setCapability("appPackage", "de.payback.client.android");
 			capability.setCapability("appActivity", "de.payback.app.deeplinks.StarterActivity");
+			capability.setCapability(MobileCapabilityType.NO_RESET, true);
 						
 			driver = new AndroidDriver(url, capability);
 			

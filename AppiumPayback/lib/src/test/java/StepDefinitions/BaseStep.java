@@ -1,7 +1,11 @@
 package StepDefinitions;
 
+import java.time.Duration;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import Pages.BasePage;
@@ -12,11 +16,14 @@ public class BaseStep{
 	
 	BaseClass _baseClass;
 	BasePage _basePage;
+	WebDriverWait wait;
+	
 	
 	public BaseStep (BaseClass baseClass,
 			BasePage basePage) {
 		_baseClass = baseClass;
 		_basePage = basePage;
+		wait = new WebDriverWait(_baseClass.driver, Duration.ofSeconds(60));
 	}
 	
 	@Given("I open PayBack application in android")
@@ -28,31 +35,29 @@ public class BaseStep{
 	@When("I click coupon button")
 	public void IClickCouponButton() {
 
-		WebElement couponBtn = _baseClass.driver.findElement(By.id("de.payback.client.android:id/coupon_center_dest"));
+		WebElement couponBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("de.payback.client.android:id/coupon_center_dest")));
 		couponBtn.click();
 	}
 	
 	@And("I filter for REWE coupon")
 	public void IFilterForREWECoupon() {
 
-		WebElement filterBtn = _baseClass.driver.findElement(By.id("de.payback.client.android:id/filter_button"));
+		WebElement filterBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("de.payback.client.android:id/filter_button")));
 		filterBtn.click();
 		
-		WebElement reweBtn = _baseClass.driver.findElement(By.xpath("(//androidx.recyclerview.widget.RecyclerView//android.widget.FrameLayout)[3]"));
+		WebElement reweBtn = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("(//androidx.recyclerview.widget.RecyclerView//android.widget.FrameLayout)[3]")));
 		reweBtn.click();
 		
-		WebElement firstCouponActivateBtn = _baseClass.driver.findElement(By.xpath("//android.widget.FrameLayout[@index = '1']/descendant::android.widget.Button"));
+		WebElement firstCouponActivateBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("//android.widget.FrameLayout[@index = '1']")));
 		firstCouponActivateBtn.click();
 	}
 
 	@Then("I have activated the coupon")
 	public void IHaveActivatedTheCoupon() {
 
-		WebElement firstCouponActivateBtn = _baseClass.driver.findElement(By.xpath("//android.widget.FrameLayout[@index = '1']/descendant::android.widget.Button"));
-		String text = firstCouponActivateBtn.getText();
+		boolean isActivated = wait.until(ExpectedConditions.textToBe(By.xpath("//android.widget.FrameLayout[@index = '1']/descendant::android.widget.Button"), "Vor Ort einlösen"));
 		
-		Assert.assertEquals(text, "Vor Ort einlösen");
-
+		Assert.assertEquals(isActivated, true);
 	}
 
 }
