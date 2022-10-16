@@ -2,8 +2,9 @@ Feature: PayBack Mobile Application
 
   Scenario: Select REWE Coupon
     Given I open PayBack application in android
-    When I complete action
-    Then I validate the outcomes
+    When I click coupon button
+    	And I filter for REWE coupon
+    Then I have activated the coupon
 
 #  Scenario Outline: Select different Coupons
 #    Given I want to write a step with <name>

@@ -40,7 +40,10 @@ dependencies {
 	
 	// https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
 	testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.3'
-	    
+	
+	// https://mvnrepository.com/artifact/io.cucumber/cucumber-picocontainer
+	testImplementation group: 'io.cucumber', name: 'cucumber-picocontainer', version: '7.8.1'
+	
 }
 
 tasks.named('test') {

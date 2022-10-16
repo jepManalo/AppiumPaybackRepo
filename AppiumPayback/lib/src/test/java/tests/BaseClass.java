@@ -4,17 +4,23 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.testng.annotations.*;
 
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.MobileCapabilityType;
+import io.cucumber.java.*;
 
 public class BaseClass {
 	
-	AndroidDriver driver = null;
+	public AndroidDriver driver;
+	public URL url;
 	
-	@BeforeTest
-	public void Setup () throws MalformedURLException {
+	public BaseClass() throws MalformedURLException {
+		
+		url = new URL("http://localhost:4723/wd/hub"); //using 0.0.0.0
+	}
+	
+	@Before
+	public void Setup () {
 		
 		try {			
 			DesiredCapabilities capability = new DesiredCapabilities();
@@ -26,10 +32,10 @@ public class BaseClass {
 			capability.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 60);
 			capability.setCapability("appPackage", "de.payback.client.android");
 			capability.setCapability("appActivity", "de.payback.app.deeplinks.StarterActivity");
-			
-			URL url = new URL("http://localhost:4723/wd/hub"); //using 0.0.0.0
-			
+						
 			driver = new AndroidDriver(url, capability);
+			
+			System.out.println("Done");
 		}
 		catch(Exception e){
 			System.out.println("Cause is " + e.getCause());
@@ -38,9 +44,10 @@ public class BaseClass {
 		}
 	}	
 	
-	@AfterTest
+	@After
 	public void TearDown() {
 		
+		driver.close();
 	}
 
 }
