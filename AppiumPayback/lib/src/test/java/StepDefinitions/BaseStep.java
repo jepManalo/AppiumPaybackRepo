@@ -39,8 +39,8 @@ public class BaseStep{
 		couponBtn.click();
 	}
 	
-	@And("I filter for REWE coupon")
-	public void IFilterForREWECoupon() {
+	@And("I filter and activate first REWE coupon")
+	public void IFilterAndActivateFirstREWECoupon() {
 
 		WebElement filterBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("de.payback.client.android:id/filter_button")));
 		filterBtn.click();
@@ -48,14 +48,18 @@ public class BaseStep{
 		WebElement reweBtn = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("(//androidx.recyclerview.widget.RecyclerView//android.widget.FrameLayout)[3]")));
 		reweBtn.click();
 		
-		WebElement firstCouponActivateBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("//android.widget.FrameLayout[@index = '1']")));
-		firstCouponActivateBtn.click();
+		WebElement firstCouponBtn = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//android.widget.FrameLayout[@index = '1'][@resource-id = 'de.payback.client.android:id/coupon']")));
+		firstCouponBtn.click();
+		
+		WebElement activateBtn = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//android.widget.FrameLayout[@index = '0']/descendant::android.widget.Button")));
+		activateBtn.click();
+		
 	}
 
 	@Then("I have activated the coupon")
 	public void IHaveActivatedTheCoupon() {
 
-		boolean isActivated = wait.until(ExpectedConditions.textToBe(By.xpath("//android.widget.FrameLayout[@index = '1']/descendant::android.widget.Button"), "Vor Ort einlösen"));
+		boolean isActivated = wait.until(ExpectedConditions.textToBe(By.xpath("//android.widget.FrameLayout[@index = '0']/descendant::android.widget.Button"), "Vor Ort einlösen"));
 		
 		Assert.assertEquals(isActivated, true);
 	}
