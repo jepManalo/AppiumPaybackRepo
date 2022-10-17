@@ -1,67 +1,54 @@
 package StepDefinitions;
 
-import java.time.Duration;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
-
-import Pages.BasePage;
+import Pages.CouponPage;
+import Pages.LandingPage;
+import Pages.SearchPage;
+import Pages.SearchResultsPage;
 import io.cucumber.java.en.*;
-import tests.BaseClass;
 
 public class BaseStep{
 	
-	BaseClass _baseClass;
-	BasePage _basePage;
-	WebDriverWait wait;
+	private LandingPage _landingPage;
+	private SearchPage _searchPage;
+	private CouponPage _couponPage;
+	private SearchResultsPage _searchResultsPage;
 	
-	
-	public BaseStep (BaseClass baseClass,
-			BasePage basePage) {
-		_baseClass = baseClass;
-		_basePage = basePage;
-		wait = new WebDriverWait(_baseClass.driver, Duration.ofSeconds(60));
+	public BaseStep (LandingPage landingPage,
+			SearchPage searchPage,
+			SearchResultsPage searchResultsPage,
+			CouponPage couponPage) {
+		_landingPage = landingPage;
+		_searchPage = searchPage;
+		_searchResultsPage = searchResultsPage;
+		_couponPage = couponPage;
 	}
 	
 	@Given("I open PayBack application in android")
 	public void IOpenPayBackApplicationInAndroid() {
 		
-		//Nothing to do here since @BeforeTest Already opens the application
+		//Nothing to do here since @Before Already opens the application
 	}
 
 	@When("I click coupon button")
 	public void IClickCouponButton() {
 
-		WebElement couponBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("de.payback.client.android:id/coupon_center_dest")));
-		couponBtn.click();
+		_landingPage.ClickCouponBtn();
 	}
 	
-	@And("I filter and activate first REWE coupon")
-	public void IFilterAndActivateFirstREWECoupon() {
+	@And("I filter and activate first {string} coupon")
+	public void IFilterAndActivateFirstREWECoupon(String coupon) {
 
-		WebElement filterBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("de.payback.client.android:id/filter_button")));
-		filterBtn.click();
-		
-		WebElement reweBtn = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("(//androidx.recyclerview.widget.RecyclerView//android.widget.FrameLayout)[3]")));
-		reweBtn.click();
-		
-		WebElement firstCouponBtn = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//android.widget.FrameLayout[@index = '1'][@resource-id = 'de.payback.client.android:id/coupon']")));
-		firstCouponBtn.click();
-		
-		WebElement activateBtn = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//android.widget.FrameLayout[@index = '0']/descendant::android.widget.Button")));
-		activateBtn.click();
+		_searchPage.ClickFilterBtn();
+		_searchResultsPage.ClickCouponBtn(coupon);
+		_couponPage.ClickFirstCoupon();
+		_couponPage.ClickActivateBtn();
 		
 	}
 
 	@Then("I have activated the coupon")
 	public void IHaveActivatedTheCoupon() {
 
-		boolean isActivated = wait.until(ExpectedConditions.textToBe(By.xpath("//android.widget.FrameLayout[@index = '0']/descendant::android.widget.Button"), "Vor Ort einlösen"));
-		
-		Assert.assertEquals(isActivated, true);
+		_couponPage.IsActivated();
 	}
 
 }
